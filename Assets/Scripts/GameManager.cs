@@ -26,13 +26,13 @@ public class GameManager : MonoBehaviour
 
     public void UpdatePlayerHoldTime(int PlayerNumber, float value)
     {
-        UiManager.UpdatePlayerHoldTime(PlayerNumber, (value / TimeToWin) * 100);
+        UiManager.UpdatePlayerHoldTime(PlayerNumber, (value / TimeToWin));
         if (value >= TimeToWin) PlayerWin(PlayerNumber);
     }
 
     public void PlayerWin(int PlayerNumber)
     {
-        Debug.Log("Player " + PlayerNumber + " win !");
+        //Debug.Log("Player " + PlayerNumber + " win !");
     }
 
 }
