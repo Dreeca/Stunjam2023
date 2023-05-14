@@ -35,6 +35,7 @@ public class Ball : Interactable
 
     public override void Dropped(PlayerController player)
     {
+        base.Dropped(player);
         Use(player);
     }
 

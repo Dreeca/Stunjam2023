@@ -48,6 +48,7 @@ public class WaterGun : Interactable
 
     public override void Dropped(PlayerController player)
     {
+        base.Dropped(player);
         transform.parent = Interactables;
         transform.position = startPosition;
         waterCollider.enabled = true;

@@ -180,7 +180,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("collision " + collision.gameObject);
         if (collision.gameObject.CompareTag("Interactable"))
         {
             collision.gameObject.GetComponent<Interactable>().OnCollide(this);
@@ -189,7 +188,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger " + other.gameObject);
         if (other.CompareTag("Interactable"))
         {
             other.GetComponent<Interactable>().OnCollide(this);
@@ -229,6 +227,8 @@ public class PlayerController : MonoBehaviour
         tablette.transform.localPosition = Vector3.zero;
         holdItem = tablette.GetComponent<Interactable>();
         hasTablette = true;
+
+        AudioManager.Instance.Play(transform.position, SoundType.ITEM_PICKUP);
     }
     public void DropTablette()
     {
@@ -247,6 +247,7 @@ public class PlayerController : MonoBehaviour
         ball.GetComponent<Rigidbody>().isKinematic = true;
         ball.GetComponent<NavMeshObstacle>().enabled = false;
         holdItem = ball.GetComponent<Interactable>();
+        AudioManager.Instance.Play(transform.position, SoundType.ITEM_PICKUP);
     }
     public void ReleaseBall(Transform ball)
     {
@@ -260,6 +261,7 @@ public class PlayerController : MonoBehaviour
         Lego.gameObject.transform.parent = handPivot;
         Lego.transform.localPosition = Vector3.zero;
         holdItem = Lego.GetComponent<Interactable>();
+        AudioManager.Instance.Play(transform.position, SoundType.ITEM_PICKUP);
     }
 
     public void DropLego(Interactable Lego)
@@ -275,6 +277,7 @@ public class PlayerController : MonoBehaviour
         nerfGun.gameObject.transform.parent = handPivot;
         nerfGun.transform.localPosition = Vector3.zero;
         holdItem = nerfGun.GetComponent<Interactable>();
+        AudioManager.Instance.Play(transform.position, SoundType.ITEM_PICKUP);
     }
 
     public void DropNerfGun()
@@ -302,6 +305,7 @@ public class PlayerController : MonoBehaviour
         Vector3 currentpos = new Vector3(0, waterGun.transform.localPosition.y, 0);
         waterGun.localPosition = currentpos;
         holdItem = waterGun.GetComponent<Interactable>();
+        AudioManager.Instance.Play(transform.position, SoundType.ITEM_PICKUP);
     }
 
     public void DropWaterGun()
@@ -334,10 +338,8 @@ public class PlayerController : MonoBehaviour
     #endregion
     public void TryGrab()
     {
-        Debug.Log(this);
         RaycastHit[] hits = Physics.SphereCastAll(transform.localPosition, 0.5f, Forward, 1f, LayerMask.GetMask("Items"));
         //debug all hits
-        Debug.Log(hits.Length);
         foreach (RaycastHit hit in hits)
         {
             if (hit.transform.TryGetComponent<Interactable>(out Interactable inter))

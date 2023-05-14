@@ -51,6 +51,7 @@ public class NoiseManager : MonoBehaviour
         get => isAwake;
         set
         {
+            Debug.Log(value);
             isAwake = value;
             Parent.gameObject.SetActive(isAwake);
 
@@ -110,7 +111,7 @@ public class NoiseManager : MonoBehaviour
             }
         }
 
-        if (lookingForTablette && Parent.remainingDistance < 1f)
+        if (lookingForTablette)
         {
             Parent.SetDestination(Tablette.position);
         }
@@ -151,9 +152,11 @@ public class NoiseManager : MonoBehaviour
     public void GoToBed()
     {
         Debug.Log("go to bed");
-        Parent.gameObject.SetActive(true);
-        Parent.SetDestination(Bed.position);
         IsAwake = true;
+        Parent.gameObject.SetActive(true);
+        Parent.enabled = true;
+        Parent.speed = 2f;
+        Parent.SetDestination(Bed.position);
         goingToBed = true;
     }
 
@@ -161,20 +164,21 @@ public class NoiseManager : MonoBehaviour
     {
         Debug.Log("look around");
         lookingAround = true;
-        Parent.gameObject.SetActive(true);
+        IsAwake = true;
+        Parent.speed = 4f;
         Parent.SetDestination(room1.position);
         goingToBed = false;
-        IsAwake = true;
     }
 
     public void StartLookingForTablette()
     {
         Debug.Log("look for tablette");
         lookingForTablette = true;
+        IsAwake = true;
+        Parent.speed = 6f;
         Parent.SetDestination(Tablette.position);
         goingToBed = false;
         lookingAround = false;
-        IsAwake = true;
     }
 
 }

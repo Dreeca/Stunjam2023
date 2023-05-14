@@ -51,6 +51,7 @@ public class Tablette : Interactable
 
     public override void Dropped(PlayerController player)
     {
+        base.Dropped(player);   
         transform.parent = Interactables;
         player.DropTablette();
         agent.enabled = true;

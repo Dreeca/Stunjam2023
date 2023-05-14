@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
             PossiblePlayers[i].gameObject.SetActive(true);
             RegisterPlayer(i + 1, PossiblePlayers[i]);
         }
+        AudioManager.Instance.Play(Vector3.zero, SoundType.MAIN_THEME);
     }
 
     public void RegisterPlayer(int PlayerNumber, PlayerController controller)

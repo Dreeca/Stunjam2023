@@ -15,7 +15,10 @@ public abstract class Interactable : MonoBehaviour
 
     public abstract void OnCollide(PlayerController player);
 
-    public abstract void Dropped(PlayerController player);
+    public virtual void Dropped(PlayerController player)
+    {
+        AudioManager.Instance.Play(player.transform.position, SoundType.ITEM_DROP);
+    }
 
     public abstract void Use(PlayerController player);
 
