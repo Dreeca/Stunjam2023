@@ -90,7 +90,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: 785f5ab8-f9a8-49fb-8cc9-05feedb78e9d
-      m_Path: <Keyboard>/numpad0
+      m_Path: <Keyboard>/enter
       m_Interactions: 
       m_Processors: 
       m_Groups: 

@@ -180,7 +180,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("collision " + collision.gameObject);
         if (collision.gameObject.CompareTag("Interactable"))
         {
             collision.gameObject.GetComponent<Interactable>().OnCollide(this);
@@ -189,7 +188,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger " + other.gameObject);
         if (other.CompareTag("Interactable"))
         {
             other.GetComponent<Interactable>().OnCollide(this);
@@ -340,10 +338,8 @@ public class PlayerController : MonoBehaviour
     #endregion
     public void TryGrab()
     {
-        Debug.Log(this);
         RaycastHit[] hits = Physics.SphereCastAll(transform.localPosition, 0.5f, Forward, 1f, LayerMask.GetMask("Items"));
         //debug all hits
-        Debug.Log(hits.Length);
         foreach (RaycastHit hit in hits)
         {
             if (hit.transform.TryGetComponent<Interactable>(out Interactable inter))
