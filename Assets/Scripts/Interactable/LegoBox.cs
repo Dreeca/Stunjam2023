@@ -9,6 +9,7 @@ public class LegoBox : Interactable
 
     public override void Dropped(PlayerController player)
     {
+        base.Dropped(player);
     }
 
     public override void OnCollide(PlayerController player)

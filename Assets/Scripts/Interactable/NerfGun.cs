@@ -36,6 +36,7 @@ public class NerfGun : Interactable
 
     public override void Dropped(PlayerController player)
     {
+        base.Dropped(player);
         transform.parent = Interactables;
         transform.position = startPosition;
         gunCollider.enabled = true;
@@ -79,6 +80,7 @@ public class NerfGun : Interactable
             lineRenderer.SetPosition(0, transform.position + offset);
             lineRenderer.SetPosition(1, transform.position + offset + player.Forward * 100);
         }
+        AudioManager.Instance.Play(player.transform.position, SoundType.DISTANT_COMBAT_FIRE);
         rayTimer = 0;
         Ammo--;
 

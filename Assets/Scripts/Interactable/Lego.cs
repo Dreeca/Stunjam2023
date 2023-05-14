@@ -10,6 +10,7 @@ public class Lego : Interactable
 
     public override void Dropped(PlayerController player)
     {
+        base.Dropped(player);
         Use(player);
     }
 
