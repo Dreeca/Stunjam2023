@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public UIManager UiManager;
     public NoiseManager Noise;
+    public List<PlayerController> PossiblePlayers;
 
     public List<PlayerController> ActivePlayer;
 
@@ -16,9 +19,15 @@ public class GameManager : MonoBehaviour
 
     public void Awake()
     {
-        if (Instance == null)
+        Instance = this;
+    }
+
+    public void StartWithPlayers(int n)
+    {
+        for (int i = 0; i < n; i++)
         {
-            Instance = this;
+            PossiblePlayers[i].gameObject.SetActive(true);
+            RegisterPlayer(i + 1, PossiblePlayers[i]);
         }
     }
 
@@ -26,6 +35,7 @@ public class GameManager : MonoBehaviour
     {
         UiManager.RegisterPlayer(PlayerNumber);
         ActivePlayer.Add(controller);
+        controller.StartPlayer();
     }
 
     public void UpdatePlayerHoldTime(int PlayerNumber, float value)
@@ -37,6 +47,15 @@ public class GameManager : MonoBehaviour
     public void PlayerWin(int PlayerNumber)
     {
         //Debug.Log("Player " + PlayerNumber + " win !");
+        ActivePlayer.ForEach(x => { x.DestroyInputs(); x.enabled = false; });
+        Noise.enabled = false;
+        Noise.Parent.enabled = false;
+        UiManager.DisplayWinner(PlayerNumber);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
     }
 
 }

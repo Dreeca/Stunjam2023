@@ -15,7 +15,12 @@ public class Lego : Interactable
 
     public override void OnCollide(PlayerController player)
     {
-        if (player != user) { player.KnockOut(transform, Duration); Destroy(this.gameObject); }
+        if (player != user)
+        {
+            player.KnockOut(transform, Duration);
+            GameManager.Instance.Noise.MakeNoise(transform.position, GameManager.Instance.Noise.LegoHit);
+            Destroy(this.gameObject);
+        }
     }
 
     public override void OnInteract(PlayerController player)

@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -38,6 +40,12 @@ public class PlayerController : MonoBehaviour
 
     public bool hasFreeHands { get { return !hasTablette && holdItem == null; } }
 
+    private InputAction myMoveUp;
+    private InputAction myMoveDown;
+    private InputAction myMoveLeft;
+    private InputAction myMoveRight;
+    private InputAction myInteract;
+
     public float HoldTime
     {
         get => holdTime;
@@ -49,36 +57,55 @@ public class PlayerController : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void StartPlayer()
     {
         InitilizeInputs();
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         handPivot = transform.Find("HandsPivot");
         interactable = GameObject.Find("[Interactable]").transform;
-        GameManager.Instance.RegisterPlayer(PlayerNumber, this);
     }
 
     private void InitilizeInputs()
     {
-        InputMap.MoveUp.Enable();
-        InputMap.MoveDown.Enable();
-        InputMap.MoveLeft.Enable();
-        InputMap.MoveRight.Enable();
-        InputMap.Interact.Enable();
+        myMoveUp = InputMap.MoveUp.Clone();
+        myMoveDown = InputMap.MoveDown.Clone();
+        myMoveLeft = InputMap.MoveLeft.Clone();
+        myMoveRight = InputMap.MoveRight.Clone();
+        myInteract = InputMap.Interact.Clone();
 
-        InputMap.MoveUp.performed += ctx => OnMoveUp(ctx);
-        InputMap.MoveDown.performed += ctx => OnMoveDown(ctx);
-        InputMap.MoveLeft.performed += ctx => OnMoveLeft(ctx);
-        InputMap.MoveRight.performed += ctx => OnMoveRight(ctx);
-        InputMap.Interact.performed += ctx => Interact(ctx);
 
-        InputMap.MoveUp.canceled += ctx => OnMoveUp(ctx);
-        InputMap.MoveDown.canceled += ctx => OnMoveDown(ctx);
-        InputMap.MoveLeft.canceled += ctx => OnMoveLeft(ctx);
-        InputMap.MoveRight.canceled += ctx => OnMoveRight(ctx);
-        InputMap.Interact.canceled += ctx => Interact(ctx);
+        myMoveUp.Enable();
+        myMoveDown.Enable();
+        myMoveLeft.Enable();
+        myMoveRight.Enable();
+        myInteract.Enable();
+
+        myMoveUp.performed += ctx => OnMoveUp(ctx);
+        myMoveDown.performed += ctx => OnMoveDown(ctx);
+        myMoveLeft.performed += ctx => OnMoveLeft(ctx);
+        myMoveRight.performed += ctx => OnMoveRight(ctx);
+        myInteract.performed += ctx => Interact(ctx);
+
+        myMoveUp.canceled += ctx => OnMoveUp(ctx);
+        myMoveDown.canceled += ctx => OnMoveDown(ctx);
+        myMoveLeft.canceled += ctx => OnMoveLeft(ctx);
+        myMoveRight.canceled += ctx => OnMoveRight(ctx);
+        myInteract.canceled += ctx => Interact(ctx);
     }
+
+
+
+    public void DestroyInputs()
+    {
+        myMoveUp.Dispose();
+        myMoveDown.Dispose();
+        myMoveLeft.Dispose();
+        myMoveRight.Dispose();
+        myInteract.Dispose();
+
+    }
+
     public void FixedUpdate()
     {
         if (wetness > 0) wetness -= Time.fixedDeltaTime;
@@ -272,7 +299,8 @@ public class PlayerController : MonoBehaviour
     public void GrabWaterGun(Transform waterGun)
     {
         waterGun.gameObject.transform.parent = handPivot;
-        waterGun.transform.localPosition = Vector3.zero;
+        Vector3 currentpos = new Vector3(0, waterGun.transform.localPosition.y, 0);
+        waterGun.localPosition = currentpos;
         holdItem = waterGun.GetComponent<Interactable>();
     }
 
@@ -295,6 +323,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isKnockedOut) return;
         wetness++;
+        GameManager.Instance.Noise.MakeNoise(transform.position, GameManager.Instance.Noise.WetHit);
         if (wetness > maxWetness)
         {
             wetness = 0;
@@ -305,6 +334,7 @@ public class PlayerController : MonoBehaviour
     #endregion
     public void TryGrab()
     {
+        Debug.Log(this);
         RaycastHit[] hits = Physics.SphereCastAll(transform.localPosition, 0.5f, Forward, 1f, LayerMask.GetMask("Items"));
         //debug all hits
         Debug.Log(hits.Length);

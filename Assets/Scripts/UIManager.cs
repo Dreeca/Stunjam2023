@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,10 @@ public class UIManager : MonoBehaviour
     public GameObject player4UI;
     private Slider slider4;
     public Slider Noise;
+
+    public GameObject EndGameUI;
+    public TextMeshProUGUI WinnerTest;
+
 
     public void Awake()
     {
@@ -65,6 +70,12 @@ public class UIManager : MonoBehaviour
                 slider4.value = value;
                 break;
         }
+    }
+
+    public void DisplayWinner(int n)
+    {
+        EndGameUI.SetActive(true);
+        WinnerTest.text = "PLAYER " + n + " WIN !";
     }
 
 }

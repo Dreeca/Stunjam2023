@@ -37,7 +37,7 @@ public class WaterGun : Interactable
         }
         if (controller != null)
         {
-            transform.rotation = Quaternion.LookRotation(-Vector3.up, controller.Forward);
+            transform.rotation = Quaternion.LookRotation(-Vector3.up, Quaternion.Euler(0, -90, 0) * controller.Forward);
         }
     }
 

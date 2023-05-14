@@ -27,6 +27,8 @@ public class NoiseManager : MonoBehaviour
     [Header("Noise type")]
     public float BallNoise;
     public float NerfHit;
+    public float WetHit;
+    public float LegoHit;
 
     [SerializeField]
     private bool lookingAround;
