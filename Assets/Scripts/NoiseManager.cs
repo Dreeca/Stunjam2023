@@ -50,7 +50,8 @@ public class NoiseManager : MonoBehaviour
         set
         {
             isAwake = value;
-            zone.SetActive(isAwake);
+            Parent.gameObject.SetActive(isAwake);
+
         }
     }
 

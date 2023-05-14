@@ -186,6 +186,7 @@ public class PlayerController : MonoBehaviour
         isKnockedOut = true;
         knockOutDelay = duration;
         knockOutTimer = 0;
+        wetness = 0;
         if (holdItem != null) holdItem.Dropped(this);
     }
 
@@ -292,6 +293,7 @@ public class PlayerController : MonoBehaviour
 
     public void Wet()
     {
+        if (isKnockedOut) return;
         wetness++;
         if (wetness > maxWetness)
         {
