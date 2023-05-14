@@ -25,7 +25,7 @@ public class Lego : Interactable
     public override void Use(PlayerController player)
     {
         transform.parent = Interactables;
-        Vector3 pos = player.transform.position + player.transform.forward;
+        Vector3 pos = player.transform.position + player.Forward;
         pos.y = 0.6f;
         transform.position = pos;
         user = player;

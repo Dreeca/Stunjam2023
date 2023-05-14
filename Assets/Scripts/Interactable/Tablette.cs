@@ -35,13 +35,13 @@ public class Tablette : Interactable
     public override void OnCollide(PlayerController player)
     {
         if (justGrabbed) return;
-        if (!player.hasFreeHands) return;
+        if (!player.hasFreeHands) player.DropItem();
         if (player.isKnockedOut) return;
         if (currentHolder != null) currentHolder.DropTablette();
         player.GrabTablette(transform);
         currentHolder = player;
         justGrabbed = true;
-
+        agent.enabled = false;
     }
 
     public override void OnInteract(PlayerController player)
@@ -53,7 +53,8 @@ public class Tablette : Interactable
     {
         transform.parent = Interactables;
         player.DropTablette();
-        agent.Move(player.transform.forward);
+        agent.enabled = true;
+        agent.Move(player.Forward);
     }
 
     public override void Use(PlayerController player)

@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public InputMap InputMap;
     public float MoveSpeed;
     public int PlayerNumber;
+    public Transform StartPoint;
 
     private bool hasTablette;
     public Interactable holdItem;
@@ -30,6 +31,10 @@ public class PlayerController : MonoBehaviour
     public bool isKnockedOut;
     private float knockOutTimer;
     private float knockOutDelay;
+    public Vector3 Forward;
+
+    public float wetness;
+    public float maxWetness = 30;
 
     public bool hasFreeHands { get { return !hasTablette && holdItem == null; } }
 
@@ -51,7 +56,7 @@ public class PlayerController : MonoBehaviour
         agent.updateRotation = false;
         handPivot = transform.Find("HandsPivot");
         interactable = GameObject.Find("[Interactable]").transform;
-        GameManager.Instance.RegisterPlayer(PlayerNumber);
+        GameManager.Instance.RegisterPlayer(PlayerNumber, this);
     }
 
     private void InitilizeInputs()
@@ -76,6 +81,7 @@ public class PlayerController : MonoBehaviour
     }
     public void FixedUpdate()
     {
+        if (wetness > 0) wetness -= Time.fixedDeltaTime;
         if (isKnockedOut)
         {
             knockOutTimer += Time.fixedDeltaTime;
@@ -98,8 +104,13 @@ public class PlayerController : MonoBehaviour
                 dashTimer = 0;
             }
         }
-        else agent.Move(moveDirection.normalized * MoveSpeed);
-        if (moveDirection != Vector3.zero) transform.forward = moveDirection.normalized;
+        else
+        {
+            float wetRation = 1 - (wetness / maxWetness);
+            agent.Move(moveDirection.normalized * MoveSpeed * wetRation);
+        }
+
+        if (moveDirection != Vector3.zero) Forward = moveDirection.normalized;
         if (hasTablette) HoldTime += Time.fixedDeltaTime;
     }
     public void OnMoveUp(InputAction.CallbackContext context)
@@ -162,6 +173,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void ResetChild()
+    {
+        KnockOut(null, 5);
+        agent.Warp(StartPoint.position);
+    }
+
     public void KnockOut(Transform projectil, float duration)
     {
         Debug.Log("knock out " + gameObject.name, gameObject);
@@ -172,12 +189,15 @@ public class PlayerController : MonoBehaviour
         if (holdItem != null) holdItem.Dropped(this);
     }
 
+    public void DropItem()
+    {
+        if (holdItem != null) holdItem.Dropped(this);
+    }
+
     #region tablette
     public void GrabTablette(Transform tablette)
     {
         tablette.gameObject.transform.parent = handPivot;
-        tablette.gameObject.transform.up = transform.forward;
-        tablette.gameObject.transform.forward = Vector3.up;
         tablette.transform.localPosition = Vector3.zero;
         holdItem = tablette.GetComponent<Interactable>();
         hasTablette = true;
@@ -220,9 +240,70 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region NerfGun
+
+    public void GrabNerfGun(Transform nerfGun)
+    {
+        nerfGun.gameObject.transform.parent = handPivot;
+        nerfGun.transform.localPosition = Vector3.zero;
+        holdItem = nerfGun.GetComponent<Interactable>();
+    }
+
+    public void DropNerfGun()
+    {
+        holdItem = null;
+    }
+
+    public void ReloadNerfGun(GameObject ammo)
+    {
+        if (holdItem == null) return;
+        if (holdItem is NerfGun)
+        {
+            NerfGun nerf = holdItem as NerfGun;
+            nerf.Ammo++;
+            Destroy(ammo);
+        }
+    }
+
+    #endregion
+
+    #region WaterGun
+    public void GrabWaterGun(Transform waterGun)
+    {
+        waterGun.gameObject.transform.parent = handPivot;
+        waterGun.transform.localPosition = Vector3.zero;
+        holdItem = waterGun.GetComponent<Interactable>();
+    }
+
+    public void DropWaterGun()
+    {
+        holdItem = null;
+    }
+
+    public void ReloadWaterGun()
+    {
+        if (holdItem == null) return;
+        if (holdItem is WaterGun)
+        {
+            WaterGun water = holdItem as WaterGun;
+            water.Reload();
+        }
+    }
+
+    public void Wet()
+    {
+        wetness++;
+        if (wetness > maxWetness)
+        {
+            wetness = 0;
+            KnockOut(null, 1f);
+        }
+    }
+
+    #endregion
     public void TryGrab()
     {
-        RaycastHit[] hits = Physics.SphereCastAll(transform.localPosition, 0.2f, transform.forward, 0.55f, LayerMask.GetMask("Items"));
+        RaycastHit[] hits = Physics.SphereCastAll(transform.localPosition, 0.5f, Forward, 1f, LayerMask.GetMask("Items"));
         //debug all hits
         Debug.Log(hits.Length);
         foreach (RaycastHit hit in hits)

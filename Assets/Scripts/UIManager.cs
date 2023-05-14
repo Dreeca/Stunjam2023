@@ -14,9 +14,9 @@ public class UIManager : MonoBehaviour
     private Slider slider3;
     public GameObject player4UI;
     private Slider slider4;
+    public Slider Noise;
 
-
-    public void Start()
+    public void Awake()
     {
         player1UI.SetActive(false);
         slider1 = player1UI.transform.Find("SliderHold").GetComponent<Slider>();

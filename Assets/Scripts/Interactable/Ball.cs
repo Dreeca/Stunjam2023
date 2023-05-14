@@ -43,6 +43,7 @@ public class Ball : Interactable
         if (player == previousHolder) return;
         if (knocks)
         {
+            GameManager.Instance.Noise.MakeNoise(transform.position, GameManager.Instance.Noise.BallNoise);
             player.KnockOut(transform, knockOutTime);
             knocks = false;
         }
@@ -58,11 +59,11 @@ public class Ball : Interactable
     public override void Use(PlayerController player)
     {
         transform.parent = Interactables.transform;
-        Vector3 ballPosition = (player.transform.position + player.transform.forward * 1);
+        Vector3 ballPosition = (player.transform.position + player.Forward * 2);
         ballPosition.y = 0.7f;
         transform.position = ballPosition;
         body.isKinematic = false;
-        body.AddForce(player.transform.forward * throwForce, ForceMode.VelocityChange);
+        body.AddForce(player.Forward * throwForce, ForceMode.VelocityChange);
 
         currentHolder.ReleaseBall(transform);
         currentHolder = null;
