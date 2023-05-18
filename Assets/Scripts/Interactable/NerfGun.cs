@@ -42,6 +42,10 @@ public class NerfGun : Interactable
             rayTimer += Time.fixedDeltaTime;
             if (rayTimer > rayDuration) lineRenderer.enabled = false;
         }
+        if (currentHolder != null)
+        {
+            transform.rotation = Quaternion.LookRotation(-Vector3.up, Quaternion.Euler(0, -90, 0) * currentHolder.Forward);
+        }
     }
 
     public override void Dropped(PlayerController player)
