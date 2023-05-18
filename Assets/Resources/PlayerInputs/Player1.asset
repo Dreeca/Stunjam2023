@@ -22,7 +22,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: bf065b51-4808-4a5d-a1d3-bb3d8de772c5
-      m_Path: <Keyboard>/e
+      m_Path: <Keyboard>/w
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -39,7 +39,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: 7899979b-02e9-4657-aa58-4d0ee375fcc5
-      m_Path: <Keyboard>/e
+      m_Path: <Keyboard>/s
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -56,7 +56,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: 8080d4ee-aedb-4f9b-a77f-3d94f740969f
-      m_Path: <Keyboard>/e
+      m_Path: <Keyboard>/a
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -73,7 +73,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: bd36192a-9671-45cd-b13e-60b20cf27ef5
-      m_Path: <Keyboard>/e
+      m_Path: <Keyboard>/d
       m_Interactions: 
       m_Processors: 
       m_Groups: 

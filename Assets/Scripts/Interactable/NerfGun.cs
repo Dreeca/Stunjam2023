@@ -14,7 +14,17 @@ public class NerfGun : Interactable
     public float rayDuration = 0.25f;
     private float rayTimer;
 
-    public int Ammo = 3;
+    private int ammo = 3;
+
+    public int Ammo
+    {
+        get => ammo;
+        set
+        {
+            ammo = value;
+            GameManager.Instance.UiManager.GetPlayerUI(currentHolder.PlayerNumber).UpdateNerfUI(ammo);
+        }
+    }
 
     public override void Start()
     {
@@ -41,13 +51,18 @@ public class NerfGun : Interactable
         transform.position = startPosition;
         gunCollider.enabled = true;
         player.DropNerfGun();
+        currentHolder = null;
+        GameManager.Instance.UiManager.GetPlayerUI(player.PlayerNumber).ActivateNerf(false);
     }
 
     public override void OnCollide(PlayerController player)
     {
         if (!player.hasFreeHands) return;
         player.GrabNerfGun(transform);
+        currentHolder = player;
         gunCollider.enabled = false;
+        GameManager.Instance.UiManager.GetPlayerUI(player.PlayerNumber).ActivateNerf(true);
+        GameManager.Instance.UiManager.GetPlayerUI(currentHolder.PlayerNumber).UpdateNerfUI(ammo);
     }
 
     public override void OnInteract(PlayerController player)

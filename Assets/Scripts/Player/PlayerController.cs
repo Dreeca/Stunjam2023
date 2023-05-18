@@ -206,7 +206,7 @@ public class PlayerController : MonoBehaviour
 
     public void KnockOut(Transform projectil, float duration)
     {
-        Debug.Log("knock out " + gameObject.name, gameObject);
+        //Debug.Log("knock out " + gameObject.name, gameObject);
         agent.enabled = false;
         isKnockedOut = true;
         knockOutDelay = duration;

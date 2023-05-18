@@ -7,29 +7,30 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
 
-    public GameObject player1UI;
+    public PlayerUI player1UI;
     private Slider slider1;
-    public GameObject player2UI;
+    public PlayerUI player2UI;
     private Slider slider2;
-    public GameObject player3UI;
+    public PlayerUI player3UI;
     private Slider slider3;
-    public GameObject player4UI;
+    public PlayerUI player4UI;
     private Slider slider4;
     public Slider Noise;
 
     public GameObject EndGameUI;
     public TextMeshProUGUI WinnerTest;
 
+    public GameObject InputMaps;
 
     public void Awake()
     {
-        player1UI.SetActive(false);
+        player1UI.gameObject.SetActive(false);
         slider1 = player1UI.transform.Find("SliderHold").GetComponent<Slider>();
-        player2UI.SetActive(false);
+        player2UI.gameObject.SetActive(false);
         slider2 = player2UI.transform.Find("SliderHold").GetComponent<Slider>();
-        player3UI.SetActive(false);
+        player3UI.gameObject.SetActive(false);
         slider3 = player3UI.transform.Find("SliderHold").GetComponent<Slider>();
-        player4UI.SetActive(false);
+        player4UI.gameObject.SetActive(false);
         slider4 = player4UI.transform.Find("SliderHold").GetComponent<Slider>();
 
     }
@@ -39,16 +40,16 @@ public class UIManager : MonoBehaviour
         switch (playerNumber)
         {
             case 1:
-                player1UI.SetActive(true);
+                player1UI.gameObject.SetActive(true);
                 break;
             case 2:
-                player2UI.SetActive(true);
+                player2UI.gameObject.SetActive(true);
                 break;
             case 3:
-                player3UI.SetActive(true);
+                player3UI.gameObject.SetActive(true);
                 break;
             case 4:
-                player4UI.SetActive(true);
+                player4UI.gameObject.SetActive(true);
                 break;
         }
     }
@@ -70,6 +71,27 @@ public class UIManager : MonoBehaviour
                 slider4.value = value;
                 break;
         }
+    }
+
+    public PlayerUI GetPlayerUI(int playerNumber)
+    {
+        switch (playerNumber)
+        {
+            case 1:
+                return player1UI;
+            case 2:
+                return player2UI;
+            case 3:
+                return player3UI;
+            case 4:
+                return player4UI;
+        }
+        return null;
+    }
+
+    public void HideInputs()
+    {
+        InputMaps.SetActive(false);
     }
 
     public void DisplayWinner(int n)

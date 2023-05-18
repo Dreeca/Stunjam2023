@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -51,7 +52,6 @@ public class NoiseManager : MonoBehaviour
         get => isAwake;
         set
         {
-            Debug.Log(value);
             isAwake = value;
             Parent.gameObject.SetActive(isAwake);
 
@@ -78,7 +78,7 @@ public class NoiseManager : MonoBehaviour
             });
         }
 
-        if (goingToBed && Parent.remainingDistance < 0.1f)
+        if (Parent.hasPath && goingToBed && Parent.remainingDistance < 0.1f)
         {
             goingToBed = false;
             IsAwake = false;
@@ -151,7 +151,7 @@ public class NoiseManager : MonoBehaviour
 
     public void GoToBed()
     {
-        Debug.Log("go to bed");
+        //Debug.Log("go to bed");
         IsAwake = true;
         Parent.gameObject.SetActive(true);
         Parent.enabled = true;
@@ -162,7 +162,7 @@ public class NoiseManager : MonoBehaviour
 
     public void StartLookAround()
     {
-        Debug.Log("look around");
+        //Debug.Log("look around");
         lookingAround = true;
         IsAwake = true;
         Parent.speed = 4f;
@@ -172,7 +172,7 @@ public class NoiseManager : MonoBehaviour
 
     public void StartLookingForTablette()
     {
-        Debug.Log("look for tablette");
+        //Debug.Log("look for tablette");
         lookingForTablette = true;
         IsAwake = true;
         Parent.speed = 6f;

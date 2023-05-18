@@ -24,7 +24,6 @@ public class Ball : Interactable
         if (knocks)
         {
             float currentMagnitude = body.velocity.magnitude;
-            Debug.Log(body.velocity.magnitude);
             if (previousMagnitude < 2f && currentMagnitude < 2f)
             {
                 knocks = false;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -17,9 +18,19 @@ public class GameManager : MonoBehaviour
 
     public float TimeToWin;
 
+    public InputAction RestartAction;
+    private InputAction actionInstance;
+
     public void Awake()
     {
         Instance = this;
+    }
+
+    public void Start()
+    {
+        actionInstance = RestartAction.Clone();
+        actionInstance.Enable();
+        actionInstance.performed += (ctx) => Restart();
     }
 
     public void StartWithPlayers(int n)
@@ -30,6 +41,7 @@ public class GameManager : MonoBehaviour
             RegisterPlayer(i + 1, PossiblePlayers[i]);
         }
         AudioManager.Instance.Play(Vector3.zero, SoundType.MAIN_THEME);
+        UiManager.HideInputs();
     }
 
     public void RegisterPlayer(int PlayerNumber, PlayerController controller)
@@ -48,7 +60,7 @@ public class GameManager : MonoBehaviour
     public void PlayerWin(int PlayerNumber)
     {
         //Debug.Log("Player " + PlayerNumber + " win !");
-        ActivePlayer.ForEach(x => { x.DestroyInputs(); x.enabled = false; });
+        ActivePlayer.ForEach(x => { x.enabled = false; });
         Noise.enabled = false;
         Noise.Parent.enabled = false;
         UiManager.DisplayWinner(PlayerNumber);
@@ -56,6 +68,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        ActivePlayer.ForEach(x => { x.DestroyInputs(); });
         SceneManager.LoadScene(0);
     }
 
